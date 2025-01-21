@@ -1,4 +1,3 @@
-// src/components/GameBoard.jsx
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Circle, RotateCcw } from "lucide-react";
@@ -17,22 +16,58 @@ const GameBoard = () => {
   const [winner, setWinner] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Handle computer moves
-  useEffect(() => {
-    if (
-      gameState.opponent === "computer" &&
-      currentPlayer !== gameState.playerSymbol &&
-      !winner &&
-      !board.every((cell) => cell)
-    ) {
-      setIsAnimating(true);
-      const timer = setTimeout(() => {
-        const computerMove = getComputerMove(board, currentPlayer);
-        handleCellClick(computerMove);
-        setIsAnimating(false);
-      }, 750);
-      return () => clearTimeout(timer);
+  const executeMove = (index) => {
+    if (board[index] !== null || winner) return false;
+
+    const newBoard = [...board];
+    newBoard[index] = currentPlayer;
+    setBoard(newBoard);
+
+    const result = checkWinner(newBoard);
+    if (result) {
+      handleGameEnd(result);
+      return true;
+    } else if (newBoard.every((cell) => cell !== null)) {
+      handleGameEnd({ winner: "tie" });
+      return true;
     }
+
+    setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
+    return true;
+  };
+
+  // Handle computer moves with improved implementation
+  useEffect(() => {
+    let timeoutId;
+
+    const makeComputerMove = () => {
+      const isComputerTurn =
+        gameState.opponent === "computer" &&
+        currentPlayer !== gameState.playerSymbol;
+
+      if (isComputerTurn && !winner && !board.every((cell) => cell !== null)) {
+        setIsAnimating(true);
+
+        timeoutId = setTimeout(() => {
+          if (!winner) {
+            const computerMove = getComputerMove(board, currentPlayer);
+            if (computerMove !== -1) {
+              executeMove(computerMove);
+            }
+          }
+          setIsAnimating(false);
+        }, 2000); // Fixed 2-second delay for consistency
+      }
+    };
+
+    makeComputerMove();
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        setIsAnimating(false);
+      }
+    };
   }, [
     currentPlayer,
     board,
@@ -42,9 +77,8 @@ const GameBoard = () => {
   ]);
 
   const handleCellClick = (index) => {
-    // Enhanced click validation
     if (
-      board[index] ||
+      board[index] !== null ||
       winner ||
       isAnimating ||
       (gameState.opponent === "computer" &&
@@ -53,18 +87,7 @@ const GameBoard = () => {
       return;
     }
 
-    const newBoard = [...board];
-    newBoard[index] = currentPlayer;
-    setBoard(newBoard);
-
-    const result = checkWinner(newBoard);
-    if (result) {
-      handleGameEnd(result);
-    } else if (newBoard.every((cell) => cell)) {
-      handleGameEnd({ winner: "tie" });
-    } else {
-      setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
-    }
+    executeMove(index);
   };
 
   const handleGameEnd = (result) => {
