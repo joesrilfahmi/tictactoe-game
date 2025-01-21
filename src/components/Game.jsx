@@ -5,7 +5,7 @@ import { useGame } from "../contexts/GameContext";
 import StartScreen from "./StartScreen";
 import GameBoard from "./GameBoard";
 import ThemeToggle from "./ThemeToggle";
-import { fadeIn } from "../animations/variants.js";
+// import { fadeIn } from "../animations/variants.js";
 
 const Game = () => {
   const { gameState } = useGame();
@@ -17,7 +17,7 @@ const Game = () => {
     >
       <div className="container mx-auto px-4 py-8 max-w-lg">
         <motion.div
-          variants={fadeIn}
+          // variants={fadeIn}
           initial="hidden"
           animate="visible"
           className="flex justify-between items-center mb-8"
