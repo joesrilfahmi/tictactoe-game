@@ -17,6 +17,7 @@ const GameBoard = () => {
   const [winner, setWinner] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Handle computer moves
   useEffect(() => {
     if (
       gameState.opponent === "computer" &&
@@ -41,7 +42,16 @@ const GameBoard = () => {
   ]);
 
   const handleCellClick = (index) => {
-    if (board[index] || winner || isAnimating) return;
+    // Enhanced click validation
+    if (
+      board[index] ||
+      winner ||
+      isAnimating ||
+      (gameState.opponent === "computer" &&
+        currentPlayer !== gameState.playerSymbol)
+    ) {
+      return;
+    }
 
     const newBoard = [...board];
     newBoard[index] = currentPlayer;
@@ -97,15 +107,10 @@ const GameBoard = () => {
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-8"
-    >
+    <motion.div variants={containerVariants} initial="hidden" animate="visible">
       <motion.div
         variants={fadeIn}
-        className="flex flex-col md:flex-row justify-between items-center gap-4"
+        className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6"
       >
         <div className="flex items-center gap-3">
           <div className="text-lg font-semibold text-gray-800 dark:text-gray-200">
@@ -136,8 +141,8 @@ const GameBoard = () => {
           whileHover={{ scale: 1.1, rotate: 180 }}
           whileTap={{ scale: 0.9 }}
           onClick={handleRestart}
-          className="p-3 rounded-full bg-white dark:bg-gray-700 shadow-md hover:shadow-lg
-            transition-all duration-300"
+          className="p-3 rounded-full bg-white dark:bg-gray-700 shadow-md 
+          hover:shadow-lg transition-all duration-300"
         >
           <RotateCcw className="w-6 h-6 text-gray-600 dark:text-gray-300" />
         </motion.button>
@@ -151,6 +156,7 @@ const GameBoard = () => {
             onClick={() => handleCellClick(index)}
             isWinning={winLine?.includes(index)}
             disabled={
+              Boolean(board[index]) ||
               winner ||
               isAnimating ||
               (gameState.opponent === "computer" &&
@@ -160,7 +166,7 @@ const GameBoard = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-3 md:gap-4">
+      <div className="grid grid-cols-3 gap-3 md:gap-4 mt-6">
         <ScoreCard
           label="X"
           score={gameState.scores.X}

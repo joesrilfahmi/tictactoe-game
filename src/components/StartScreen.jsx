@@ -1,4 +1,3 @@
-// src/components/StartScreen.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import { X, Circle, User, Cpu } from "lucide-react";
@@ -123,14 +122,14 @@ const OpponentButton = ({ type, active, onClick }) => {
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
       className={`
-        flex-1 py-6 rounded-xl
+        w-24 h-24 md:w-28 md:h-28 rounded-xl
         flex flex-col items-center justify-center gap-2
         transition-all duration-300
- ${
-   active
-     ? "bg-blue-500 text-white shadow-lg"
-     : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
- }
+        ${
+          active
+            ? "bg-blue-500 text-white shadow-lg"
+            : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200"
+        }
       `}
     >
       {type === "player" ? (
