@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Circle, RotateCcw } from "lucide-react";
 import { useGame } from "../contexts/GameContext";
-import { containerVariants, fadeIn } from "../animations/variants";
+import { containerVariants, fadeIn } from "../animations/index";
 import Cell from "./Cell";
 import WinModal from "./WinModal";
 import { checkWinner, getComputerMove } from "../utils/gameUtils";

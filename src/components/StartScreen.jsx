@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { X, Circle, User, Cpu } from "lucide-react";
 import { useGame } from "../contexts/GameContext";
-import { containerVariants, scaleIn } from "../animations/variants";
+import { containerVariants, scaleIn } from "../animations/index";
 
 const StartScreen = () => {
   const { gameState, setGameState } = useGame();

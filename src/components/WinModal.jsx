@@ -2,7 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Trophy } from "lucide-react";
-import { slideUp } from "../animations/variants";
+import { slideUp } from "../animations/index";
 
 const WinModal = ({ winner, onPlayAgain, onQuit }) => {
   return (
