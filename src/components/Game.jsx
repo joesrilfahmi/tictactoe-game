@@ -5,7 +5,7 @@ import { useGame } from "../contexts/GameContext";
 import StartScreen from "./StartScreen";
 import GameBoard from "./GameBoard";
 import ThemeToggle from "./ThemeToggle";
-import { fadeIn } from "../animations/variants";
+import { fadeIn } from "../animations/variants.js";
 
 const Game = () => {
   const { gameState } = useGame();
